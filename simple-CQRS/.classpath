@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/home/manu/PlayFramework/play-1.2.5.13-viareport/framework/lib/joda-time-2.1.jar" sourcepath="/home/manu/.m2/repository/joda-time/joda-time/2.1/joda-time-2.1-sources.jar"/>
-	<classpathentry kind="lib" path="/home/manu/EclipseJuno/workspace/driller_back/lib/guava-13.0.1.jar" sourcepath="/home/manu/.m2/repository/com/google/guava/guava/13.0.1/guava-13.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/guava-14.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/joda-time-2.2.jar" sourcepath="lib/joda-time-2.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
