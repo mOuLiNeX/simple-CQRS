@@ -28,6 +28,7 @@ public class Program {
 		new BookStateHandler(query);
 		new LateReturnNotifier();
 
+		// Traitements (procédural)
 		BookId bookId = BookId.newBookId();
 
 		create(factory, bookId);

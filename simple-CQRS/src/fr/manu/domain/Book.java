@@ -4,6 +4,8 @@ import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import com.google.common.base.Objects;
+
 import fr.manu.domain.event.BookLent;
 import fr.manu.domain.event.BookRegistered;
 import fr.manu.domain.event.BookReturned;
@@ -52,5 +54,33 @@ public class Book extends AggregateRoot<BookId> {
 		Days actualDuration = Days.daysBetween(date, returnDate);
 		addEvent(new BookReturned(id, borrower, actualDuration,
 				(actualDuration.getDays() > expectedDuration.getDays())));
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Book other = (Book) obj;
+		return Objects.equal(this.id, other.id)
+				&& Objects.equal(this.isbn, other.isbn)
+				&& Objects.equal(this.title, other.title);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(this.id, this.isbn, this.title);
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).addValue(this.id)
+				.addValue(this.isbn).addValue(this.title).toString();
 	}
 }

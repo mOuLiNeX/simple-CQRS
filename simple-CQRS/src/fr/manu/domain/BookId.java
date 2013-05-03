@@ -2,40 +2,39 @@ package fr.manu.domain;
 
 import java.util.UUID;
 
-public class BookId {
-    private UUID id;
+import com.google.common.base.Objects;
 
-    private BookId(UUID id) {
-        this.id = id;
-    }
+public final class BookId {
+	private final UUID id;
 
-    public static BookId newBookId() {
-        return new BookId(UUID.randomUUID());
-    }
+	private BookId(UUID id) {
+		this.id = id;
+	}
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
+	public static final BookId newBookId() {
+		return new BookId(UUID.randomUUID());
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        BookId other = (BookId) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BookId other = (BookId) obj;
+		return Objects.equal(this.id, other.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(this.id);
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).addValue(this.id).toString();
+	}
 
 }
