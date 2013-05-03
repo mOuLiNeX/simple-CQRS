@@ -55,8 +55,8 @@ public class Program {
 			LocalDate returnDate) throws ArgumentException {
 		ISession session = factory.openSession();
 
-		Repository books = new BookRepository();
-		Book book = (Book) books.findById(bookId);
+		Repository<BookId, Book> books = new BookRepository();
+		Book book = books.findById(bookId);
 
 		book.giveBack(returnDate);
 
@@ -68,9 +68,8 @@ public class Program {
 		ISession session = factory.openSession();
 
 		try {
-			Repository books = new BookRepository();
-
-			Book book = (Book) books.findById(bookId);
+			Repository<BookId, Book> books = new BookRepository();
+			Book book = books.findById(bookId);
 
 			book.lend(name, date, duration);
 
@@ -83,7 +82,7 @@ public class Program {
 	private static void create(ISessionFactory factory, BookId bookId) {
 		ISession session = factory.openSession();
 		try {
-			Repository books = new BookRepository();
+			Repository<BookId, Book> books = new BookRepository();
 
 			books.add(new Book(bookId, "The Lord of the Rings", "0-618-15396-9"));
 			session.submitChanges();

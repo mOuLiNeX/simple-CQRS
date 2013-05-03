@@ -1,7 +1,7 @@
 package fr.manu.framework.event;
 
-import fr.manu.framework.domain.AggregateRoot;
+import fr.manu.framework.domain.IAggregateRoot;
 
-public interface Event<T extends AggregateRoot> {
-	void visit(T domainRoot);
+public interface Event<TAggregateRoot extends IAggregateRoot<?>> {
+	void visit(TAggregateRoot domainRoot);
 }

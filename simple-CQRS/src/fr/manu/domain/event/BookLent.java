@@ -30,7 +30,6 @@ public class BookLent implements Event<Book> {
 		book.borrower = this.borrower;
 		book.date = this.date;
 		book.expectedDuration = this.expectedDuration;
-
 	}
 
 }

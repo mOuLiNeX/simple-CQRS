@@ -35,8 +35,7 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 	}
 
 	private TAggregateRoot load(ID id) {
-		Collection<Event> events = aggregateRootStorage.get(id);
-		TAggregateRoot user = createInstance(id, events);
+		TAggregateRoot user = createInstance(id, aggregateRootStorage.get(id));
 		items.put(id, user);
 		return user;
 	}

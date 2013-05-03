@@ -7,17 +7,18 @@ import fr.manu.framework.event.IUncommittedEvents;
 import fr.manu.framework.event.UncommittedEvents;
 
 public abstract class AggregateRoot<ID> implements IAggregateRoot<ID> {
+	protected ID id;
 
 	private final UncommittedEvents uncommittedEvents = new UncommittedEvents();
 
-	protected void replay(Collection<Event> events) {
+	public void replay(Collection<Event> events) {
 		for (Event event : events) {
-			this.acceptEvent(event);
+			this.accept(event);
 		}
 	}
 
-	protected void append(Event event) {
-		uncommittedEvents.Append(event);
+	private void append(Event event) {
+		uncommittedEvents.append(event);
 	}
 
 	@Override
@@ -25,8 +26,23 @@ public abstract class AggregateRoot<ID> implements IAggregateRoot<ID> {
 		return uncommittedEvents;
 	}
 
-	public void acceptEvent(Event visitor) {
+	// Pattern visitor
+	private void accept(Event visitor) {
 		visitor.visit(this);
+	}
+
+	public void addEvent(Event event) {
+		accept(event);
+		append(event);
+	}
+
+	public AggregateRoot(ID id) {
+		this.id = id;
+	}
+
+	@Override
+	public ID getId() {
+		return id;
 	}
 
 }

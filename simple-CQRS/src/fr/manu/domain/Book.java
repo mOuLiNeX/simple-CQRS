@@ -1,7 +1,5 @@
 package fr.manu.domain;
 
-import java.util.Collection;
-
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -11,11 +9,9 @@ import fr.manu.domain.event.BookRegistered;
 import fr.manu.domain.event.BookReturned;
 import fr.manu.exception.ArgumentException;
 import fr.manu.framework.domain.AggregateRoot;
-import fr.manu.framework.event.Event;
 import fr.manu.framework.exception.InvalidOperationException;
 
 public class Book extends AggregateRoot<BookId> {
-	private final BookId id;
 
 	public String title;
 
@@ -27,26 +23,14 @@ public class Book extends AggregateRoot<BookId> {
 
 	public Period expectedDuration;
 
-	public Book(BookId id, Collection<Event> events) {
-		this.id = id;
-
-		for (Event<Book> event : events) {
-			acceptEvent(event);
-		}
-	}
-
-	@Override
-	public BookId getId() {
-		// TODO Auto-generated method stub
-		return id;
+	public Book(BookId id) {
+		super(id);
 	}
 
 	public Book(BookId id, String title, String isbn) {
-		this.id = id;
+		this(id);
 
-		Event<Book> event = new BookRegistered(id, title, isbn);
-		acceptEvent(event);
-		append(event);
+		addEvent(new BookRegistered(id, title, isbn));
 	}
 
 	public void lend(String borrower, LocalDate date, Period expectedDuration)
@@ -54,9 +38,7 @@ public class Book extends AggregateRoot<BookId> {
 		if (this.borrower != null)
 			throw new InvalidOperationException("The book is already lent.");
 
-		Event<Book> event = new BookLent(id, borrower, date, expectedDuration);
-		acceptEvent(event);
-		append(event);
+		addEvent(new BookLent(id, borrower, date, expectedDuration));
 	}
 
 	public void giveBack(LocalDate returnDate)
@@ -68,10 +50,7 @@ public class Book extends AggregateRoot<BookId> {
 					"The book cannot be returned before being lent.");
 
 		Days actualDuration = Days.daysBetween(date, returnDate);
-		Event<Book> event = new BookReturned(id, borrower, actualDuration,
-				(actualDuration.getDays() > expectedDuration.getDays()));
-
-		acceptEvent(event);
-		append(event);
+		addEvent(new BookReturned(id, borrower, actualDuration,
+				(actualDuration.getDays() > expectedDuration.getDays())));
 	}
 }

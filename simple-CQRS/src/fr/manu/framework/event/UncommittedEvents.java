@@ -9,7 +9,7 @@ public class UncommittedEvents implements IUncommittedEvents {
 
 	private final List<Event> events = Lists.newLinkedList();
 
-	public void Append(Event event) {
+	public void append(Event event) {
 		events.add(event);
 	}
 
