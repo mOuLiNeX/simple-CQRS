@@ -10,7 +10,7 @@ public final class BookState {
 
 	public final String title;
 
-	// Seul attribut mutable
+	// C'est le seul attribut mutable
 	public Boolean lent;
 
 	public BookState(BookId id, String title, Boolean lent) {

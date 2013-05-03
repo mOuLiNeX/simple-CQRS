@@ -10,8 +10,8 @@ import fr.manu.domain.event.BookLent;
 import fr.manu.domain.event.BookRegistered;
 import fr.manu.domain.event.BookReturned;
 import fr.manu.exception.ArgumentException;
-import fr.manu.framework.domain.AggregateRoot;
 import fr.manu.framework.exception.InvalidOperationException;
+import fr.manu.framework.impl.domain.AggregateRoot;
 
 public class Book extends AggregateRoot<BookId> {
 

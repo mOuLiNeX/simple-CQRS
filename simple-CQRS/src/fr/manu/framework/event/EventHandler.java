@@ -1,5 +1,9 @@
 package fr.manu.framework.event;
 
-public interface EventHandler {
+public abstract class EventHandler {
+
+	protected EventHandler() {
+		Bus.register(this);
+	}
 
 }

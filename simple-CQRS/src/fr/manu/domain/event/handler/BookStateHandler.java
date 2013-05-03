@@ -6,15 +6,14 @@ import fr.manu.domain.event.BookLent;
 import fr.manu.domain.event.BookRegistered;
 import fr.manu.domain.event.BookReturned;
 import fr.manu.domain.query.IBookStateQuery;
-import fr.manu.framework.event.Bus;
 import fr.manu.framework.event.EventHandler;
 
-public class BookStateHandler implements EventHandler {
+public class BookStateHandler extends EventHandler {
 
 	private final IBookStateQuery stateQuery;
 
 	public BookStateHandler(IBookStateQuery stateQuery) {
-		Bus.register(this);
+		super();
 		this.stateQuery = stateQuery;
 	}
 

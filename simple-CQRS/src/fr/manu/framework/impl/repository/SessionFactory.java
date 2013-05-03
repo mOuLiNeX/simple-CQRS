@@ -1,11 +1,16 @@
-package fr.manu.framework.repository;
+package fr.manu.framework.impl.repository;
+
+import com.google.inject.Inject;
 
 import fr.manu.framework.event.storage.IEventStorage;
+import fr.manu.framework.repository.ISession;
+import fr.manu.framework.repository.ISessionFactory;
 
 public class SessionFactory implements ISessionFactory {
 	private final IEventStorage eventStorage;
 
-	public SessionFactory(IEventStorage eventStorage) {
+	@Inject
+	SessionFactory(IEventStorage eventStorage) {
 		this.eventStorage = eventStorage;
 	}
 

@@ -1,4 +1,4 @@
-package fr.manu.framework.repository;
+package fr.manu.framework.impl.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Set;
@@ -9,6 +9,8 @@ import fr.manu.framework.domain.IAggregateRoot;
 import fr.manu.framework.event.storage.IAggregateRootStorage;
 import fr.manu.framework.event.storage.IEventStorage;
 import fr.manu.framework.exception.InvalidOperationException;
+import fr.manu.framework.repository.ISession;
+import fr.manu.framework.repository.ISessionItem;
 
 public class Session implements ISession {
 	private final IEventStorage eventStorage;

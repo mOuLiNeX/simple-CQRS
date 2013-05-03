@@ -1,9 +1,12 @@
-package fr.manu.framework.event;
+package fr.manu.framework.impl.event;
 
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+
+import fr.manu.framework.event.Event;
+import fr.manu.framework.event.IUncommittedEvents;
 
 public class UncommittedEvents implements IUncommittedEvents {
 

@@ -1,4 +1,4 @@
-package fr.manu.framework.event.storage;
+package fr.manu.framework.impl.event.storage;
 
 import java.util.Collection;
 
@@ -6,6 +6,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 import fr.manu.framework.event.Event;
+import fr.manu.framework.event.storage.IAggregateRootStorage;
 
 //  Stores list of events associated with aggregate root identifier.
 public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {

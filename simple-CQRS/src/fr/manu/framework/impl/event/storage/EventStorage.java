@@ -1,8 +1,11 @@
-package fr.manu.framework.event.storage;
+package fr.manu.framework.impl.event.storage;
 
 import java.util.Map;
 
 import com.google.common.collect.Maps;
+
+import fr.manu.framework.event.storage.IAggregateRootStorage;
+import fr.manu.framework.event.storage.IEventStorage;
 
 // There’s a specific storage for each Aggregate Root type, especially depending on identifier type, for type safety.
 public class EventStorage implements IEventStorage {

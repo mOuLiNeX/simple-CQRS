@@ -5,7 +5,7 @@ import java.util.Collection;
 import fr.manu.domain.Book;
 import fr.manu.domain.BookId;
 import fr.manu.framework.event.Event;
-import fr.manu.framework.repository.Repository;
+import fr.manu.framework.impl.repository.Repository;
 
 public class BookRepository extends Repository<BookId, Book> {
 

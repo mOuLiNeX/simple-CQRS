@@ -1,4 +1,4 @@
-package fr.manu.framework.repository;
+package fr.manu.framework.impl.repository;
 
 import java.util.Collection;
 import java.util.Map;
@@ -9,10 +9,12 @@ import fr.manu.framework.domain.IAggregateRoot;
 import fr.manu.framework.event.Bus;
 import fr.manu.framework.event.Event;
 import fr.manu.framework.event.IUncommittedEvents;
+import fr.manu.framework.event.repository.IRepository;
 import fr.manu.framework.event.storage.IAggregateRootStorage;
+import fr.manu.framework.repository.ISessionItem;
 
 public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
-		implements ISessionItem {
+		implements ISessionItem, IRepository<ID, TAggregateRoot> {
 
 	private final Map<ID, TAggregateRoot> items = Maps.newHashMap();
 
@@ -22,10 +24,12 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 		aggregateRootStorage = Session.enlist(this);
 	}
 
+	@Override
 	public void add(TAggregateRoot user) {
 		items.put(user.getId(), user);
 	}
 
+	@Override
 	public TAggregateRoot findById(ID id) {
 		if (!items.containsKey(id)) {
 			return (TAggregateRoot) load(id);
