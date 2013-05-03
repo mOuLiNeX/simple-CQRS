@@ -1,8 +1,10 @@
 package fr.manu.framework.event.storage;
 
+import fr.manu.framework.domain.IAggregateRoot;
 
 public interface IEventStorage<ID> {
-	IAggregateRootStorage getAggregateRootStore();
+	IAggregateRootStorage getAggregateRootStore(
+			Class<IAggregateRoot> aggregateType);
 
-	void dispose();
+	void close();
 }

@@ -24,8 +24,8 @@ public class Program {
 		ISessionFactory factory = new SessionFactory(new EventStorage());
 		IBookStateQuery query = new BookStateQuery();
 
+		// Enregistrement des event handlers
 		new BookStateHandler(query);
-
 		new LateReturnNotifier();
 
 		BookId bookId = BookId.newBookId();
@@ -47,6 +47,8 @@ public class Program {
 		giveBack(factory, bookId, new LocalDate(2010, 03, 1));
 		showBooks(query);
 
+		factory.close();
+
 	}
 
 	private static void giveBack(ISessionFactory factory, BookId bookId,
@@ -65,29 +67,35 @@ public class Program {
 			String name, LocalDate date, Period duration) {
 		ISession session = factory.openSession();
 
-		Repository books = new BookRepository();
+		try {
+			Repository books = new BookRepository();
 
-		Book book = (Book) books.findById(bookId);
+			Book book = (Book) books.findById(bookId);
 
-		book.lend(name, date, duration);
+			book.lend(name, date, duration);
 
-		session.submitChanges();
+			session.submitChanges();
+		} finally {
+			session.close();
+		}
 	}
 
 	private static void create(ISessionFactory factory, BookId bookId) {
 		ISession session = factory.openSession();
+		try {
+			Repository books = new BookRepository();
 
-		Repository books = new BookRepository();
-
-		books.add(new Book(bookId, "The Lord of the Rings", "0-618-15396-9"));
-		session.submitChanges();
+			books.add(new Book(bookId, "The Lord of the Rings", "0-618-15396-9"));
+			session.submitChanges();
+		} finally {
+			session.close();
+		}
 	}
 
 	private static void showBooks(IBookStateQuery query) {
 		for (BookState state : query.getBookStates()) {
-			System.out.format("%s is %s.", state.title, state.lent ? "lent"
+			System.out.format("%s is %s.\n", state.title, state.lent ? "lent"
 					: "home");
 		}
 	}
-
 }

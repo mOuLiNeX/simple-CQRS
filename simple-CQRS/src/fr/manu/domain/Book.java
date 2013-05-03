@@ -2,6 +2,7 @@ package fr.manu.domain;
 
 import java.util.Collection;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
@@ -66,7 +67,7 @@ public class Book extends AggregateRoot<BookId> {
 			throw new ArgumentException(
 					"The book cannot be returned before being lent.");
 
-		Period actualDuration = Period.fieldDifference(date, returnDate);
+		Days actualDuration = Days.daysBetween(date, returnDate);
 		Event<Book> event = new BookReturned(id, borrower, actualDuration,
 				(actualDuration.getDays() > expectedDuration.getDays()));
 

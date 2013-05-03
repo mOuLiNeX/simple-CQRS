@@ -10,10 +10,10 @@ public final class BookState {
 
 	public Boolean lent;
 
-	public BookState(BookId id, String title) {
-		super();
+	public BookState(BookId id, String title, Boolean lent) {
 		this.id = id;
 		this.title = title;
+		this.lent = lent;
 	}
 
 	@Override

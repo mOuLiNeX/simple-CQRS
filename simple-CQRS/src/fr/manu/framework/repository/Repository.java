@@ -14,7 +14,7 @@ import fr.manu.framework.event.storage.IAggregateRootStorage;
 public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 		implements ISessionItem {
 
-	private final Map<ID, TAggregateRoot> users = Maps.newHashMap();
+	private final Map<ID, TAggregateRoot> items = Maps.newHashMap();
 
 	private final IAggregateRootStorage<ID> aggregateRootStorage;
 
@@ -23,17 +23,21 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 	}
 
 	public void add(TAggregateRoot user) {
-		users.put(user.getId(), user);
+		items.put(user.getId(), user);
 	}
 
 	public TAggregateRoot findById(ID id) {
-		return (TAggregateRoot) users.get(id);
+		if (!items.containsKey(id)) {
+			return (TAggregateRoot) load(id);
+		} else {
+			return (TAggregateRoot) items.get(id);
+		}
 	}
 
 	private TAggregateRoot load(ID id) {
 		Collection<Event> events = aggregateRootStorage.get(id);
 		TAggregateRoot user = createInstance(id, events);
-		users.put(id, user);
+		items.put(id, user);
 		return user;
 	}
 
@@ -42,14 +46,14 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 
 	@Override
 	public void submitChanges() {
-		for (IAggregateRoot<ID> user : users.values()) {
+		for (IAggregateRoot<ID> user : items.values()) {
 			IUncommittedEvents uncomitedEvents = user.getUncommittedEvents();
 			if (uncomitedEvents.hasEvents()) {
 				aggregateRootStorage.append(user.getId(), uncomitedEvents);
 				publishEvents(uncomitedEvents);
 				uncomitedEvents.commit();
 			}
-			users.clear();
+			items.clear();
 		}
 	}
 

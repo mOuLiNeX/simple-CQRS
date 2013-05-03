@@ -33,8 +33,8 @@ public class BookStateQuery implements IBookStateQuery {
 	}
 
 	@Override
-	public void addBookState(BookId id, String title) {
-		states.put(id, new BookState(id, title));
+	public void addBookState(BookId id, String title, Boolean lent) {
+		states.put(id, new BookState(id, title, lent));
 	}
 
 	@Override

@@ -11,11 +11,15 @@ public class SessionFactory implements ISessionFactory {
 
 	@Override
 	public ISession openSession() {
-		return new Session(eventStorage);
+		if (Session.exists()) {
+			return Session.get();
+		} else {
+			return new Session(eventStorage);
+		}
 	}
 
-	public void dispose() {
-		eventStorage.dispose();
+	public void close() {
+		eventStorage.close();
 	}
 
 }

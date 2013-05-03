@@ -1,5 +1,7 @@
 package fr.manu.framework.repository;
 
-public interface ISessionItem {
+import fr.manu.framework.domain.IAggregateRoot;
+
+public interface ISessionItem<ID, TAggregateRoot extends IAggregateRoot<ID>> {
 	void submitChanges();
 }

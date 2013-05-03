@@ -8,26 +8,21 @@ import com.google.common.collect.Maps;
 public class EventStorage implements IEventStorage {
 	private final Map<Class, IAggregateRootStorage> stores = Maps.newHashMap();
 
-	public IAggregateRootStorage getAggregateRootStore() {
-
-		// Object store;
-		//
-		// if (!stores.contains(typeof(TAggregateRoot), out store))
-		//
-		// {
-		//
-		// store = new AggregateRootStorage();
-		//
-		// stores.put(typeof (TAggregateRoot), store);
-		//
-		// }
-		//
-		// return store;
-		return new AggregateRootStorage();
-
+	public void close() {
+		stores.clear();
 	}
 
-	public void dispose() {
-		stores.clear();
+	@Override
+	public IAggregateRootStorage getAggregateRootStore(Class aggregateType) {
+		IAggregateRootStorage store;
+
+		if (!stores.containsKey(aggregateType)) {
+			store = new AggregateRootStorage();
+			stores.put(aggregateType, store);
+		} else {
+			store = stores.get(aggregateType);
+		}
+
+		return store;
 	}
 }

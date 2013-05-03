@@ -11,7 +11,7 @@ public interface IBookStateQuery {
 
 	Collection<BookState> getLentBooks();
 
-	void addBookState(BookId id, String title);
+	void addBookState(BookId id, String title, Boolean lent);
 
 	void setLent(BookId id, Boolean lent);
 }

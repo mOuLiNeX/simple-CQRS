@@ -1,9 +1,11 @@
 package fr.manu.framework.repository;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import fr.manu.framework.domain.IAggregateRoot;
 import fr.manu.framework.event.storage.IAggregateRootStorage;
 import fr.manu.framework.event.storage.IEventStorage;
 import fr.manu.framework.exception.InvalidOperationException;
@@ -17,13 +19,17 @@ public class Session implements ISession {
 
 	Session(IEventStorage eventStorage) {
 		this.eventStorage = eventStorage;
-		if (current != null)
+		if (exists())
 			throw new InvalidOperationException("Cannot nest unit of work");
 		current.set(this);
 	}
 
-	private static Session get() {
+	static Session get() {
 		return current.get();
+	}
+
+	public static boolean exists() {
+		return current.get() != null;
 	}
 
 	public void submitChanges() {
@@ -33,7 +39,7 @@ public class Session implements ISession {
 		enlistedItems.clear();
 	}
 
-	public void dispose() {
+	public void close() {
 		current.remove();
 	}
 
@@ -43,7 +49,10 @@ public class Session implements ISession {
 
 		unitOfWork.enlistedItems.add(repository);
 
-		return unitOfWork.eventStorage.getAggregateRootStore();
+		// Récup type de l'AggregateRoot via generics sur Repository
+		Class<IAggregateRoot> aggregateRootType = (Class<IAggregateRoot>) ((ParameterizedType) repository
+				.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+		return unitOfWork.eventStorage.getAggregateRootStore(aggregateRootType);
 
 	}
 }
