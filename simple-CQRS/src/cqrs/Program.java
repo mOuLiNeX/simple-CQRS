@@ -3,6 +3,7 @@ package cqrs;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -11,18 +12,28 @@ import cqrs.domain.BookId;
 import cqrs.domain.event.handler.BookStateHandler;
 import cqrs.domain.event.handler.LateReturnNotifier;
 import cqrs.domain.query.BookState;
+import cqrs.domain.query.BookStateQuery;
 import cqrs.domain.query.IBookStateQuery;
 import cqrs.domain.repository.BookRepository;
 import cqrs.exception.ArgumentException;
 import cqrs.framework.event.repository.IRepository;
+import cqrs.framework.event.storage.IEventStorage;
+import cqrs.framework.impl.event.storage.EventStorage;
+import cqrs.framework.impl.repository.SessionFactory;
 import cqrs.framework.repository.ISession;
 import cqrs.framework.repository.ISessionFactory;
-
 
 public class Program {
 
 	public static void main(String[] args) throws ArgumentException {
-		Injector injector = Guice.createInjector(new IoCModule());
+		Injector injector = Guice.createInjector(new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(IEventStorage.class).to(EventStorage.class);
+				bind(ISessionFactory.class).to(SessionFactory.class);
+				bind(IBookStateQuery.class).to(BookStateQuery.class);
+			}
+		});
 
 		ISessionFactory factory = injector.getInstance(ISessionFactory.class);
 		IBookStateQuery query = injector.getInstance(IBookStateQuery.class);
