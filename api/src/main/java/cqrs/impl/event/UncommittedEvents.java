@@ -1,34 +1,32 @@
 package cqrs.impl.event;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import cqrs.api.event.Event;
 import cqrs.api.event.IUncommittedEvents;
 
-
 public class UncommittedEvents implements IUncommittedEvents {
 
-	private final List<Event> events = Lists.newLinkedList();
+    private final List<Event> events = new LinkedList<>();
 
-	public void append(Event event) {
-		events.add(event);
-	}
+    public void append(Event event) {
+        events.add(event);
+    }
 
-	@Override
-	public Boolean hasEvents() {
-		return !events.isEmpty();
-	}
+    @Override
+    public Boolean hasEvents() {
+        return !events.isEmpty();
+    }
 
-	@Override
-	public void commit() {
-		events.clear();
-	}
+    @Override
+    public void commit() {
+        events.clear();
+    }
 
-	@Override
-	public Iterator<Event> iterator() {
-		return events.iterator();
-	}
+    @Override
+    public Iterator<Event> iterator() {
+        return events.iterator();
+    }
 }
