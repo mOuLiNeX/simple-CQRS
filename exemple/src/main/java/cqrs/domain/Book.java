@@ -8,10 +8,10 @@ import com.google.common.base.MoreObjects;
 
 import cqrs.api.exception.ArgumentException;
 import cqrs.api.exception.InvalidOperationException;
-import cqrs.api.impl.domain.AggregateRoot;
 import cqrs.domain.event.BookLent;
 import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
+import cqrs.impl.domain.AggregateRoot;
 
 public class Book extends AggregateRoot<BookId> {
 

@@ -1,3 +1,11 @@
 *.class
 bin
 /target/
+.project
+.settings/
+api/.classpath
+api/.project
+api/.settings/
+exemple/.classpath
+exemple/.project
+exemple/.settings

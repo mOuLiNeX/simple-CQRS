@@ -1,11 +1,11 @@
-package cqrs.api.impl.domain;
+package cqrs.impl.domain;
 
 import java.util.Collection;
 
 import cqrs.api.domain.IAggregateRoot;
 import cqrs.api.event.Event;
 import cqrs.api.event.IUncommittedEvents;
-import cqrs.api.impl.event.UncommittedEvents;
+import cqrs.impl.event.UncommittedEvents;
 
 
 public class AggregateRoot<ID> implements IAggregateRoot<ID> {

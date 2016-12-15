@@ -1,4 +1,4 @@
-package cqrs.api.impl.event;
+package cqrs.impl.event;
 
 import java.util.Iterator;
 import java.util.List;

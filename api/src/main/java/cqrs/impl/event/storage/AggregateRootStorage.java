@@ -1,4 +1,4 @@
-package cqrs.api.impl.event.storage;
+package cqrs.impl.event.storage;
 
 import java.util.Collection;
 

@@ -1,4 +1,4 @@
-package cqrs.api.impl.repository;
+package cqrs.impl.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Set;

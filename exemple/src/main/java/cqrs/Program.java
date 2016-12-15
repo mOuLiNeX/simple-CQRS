@@ -10,8 +10,6 @@ import com.google.inject.Injector;
 import cqrs.api.event.repository.IRepository;
 import cqrs.api.event.storage.IEventStorage;
 import cqrs.api.exception.ArgumentException;
-import cqrs.api.impl.event.storage.EventStorage;
-import cqrs.api.impl.repository.SessionFactory;
 import cqrs.api.repository.ISession;
 import cqrs.api.repository.ISessionFactory;
 import cqrs.domain.Book;
@@ -22,6 +20,8 @@ import cqrs.domain.query.BookState;
 import cqrs.domain.query.BookStateQuery;
 import cqrs.domain.query.IBookStateQuery;
 import cqrs.domain.repository.BookRepository;
+import cqrs.impl.event.storage.EventStorage;
+import cqrs.impl.repository.SessionFactory;
 
 public class Program {
 

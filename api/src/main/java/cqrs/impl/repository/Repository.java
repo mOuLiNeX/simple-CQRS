@@ -1,4 +1,4 @@
-package cqrs.api.impl.repository;
+package cqrs.impl.repository;
 
 import java.util.Collection;
 import java.util.Map;

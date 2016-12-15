@@ -3,9 +3,9 @@ package cqrs.domain.repository;
 import java.util.Collection;
 
 import cqrs.api.event.Event;
-import cqrs.api.impl.repository.Repository;
 import cqrs.domain.Book;
 import cqrs.domain.BookId;
+import cqrs.impl.repository.Repository;
 
 
 public class BookRepository extends Repository<BookId, Book> {

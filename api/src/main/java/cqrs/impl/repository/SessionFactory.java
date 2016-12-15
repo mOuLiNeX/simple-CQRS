@@ -1,4 +1,4 @@
-package cqrs.api.impl.repository;
+package cqrs.impl.repository;
 
 import com.google.inject.Inject;
 
