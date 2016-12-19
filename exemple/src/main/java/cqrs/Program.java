@@ -68,7 +68,7 @@ public class Program {
 
     private static void showBooks(IBookStateQuery query) {
         for (BookState state : query.getBookStates()) {
-            System.out.format("%s is %s.\n", state.title, state.lent ? "lent"
+			System.out.format("%s is %s.\n", state.getTitle(), state.isLent() ? "lent"
                 : "home");
         }
     }

@@ -3,24 +3,17 @@ package cqrs.domain.event;
 import cqrs.api.event.Event;
 import cqrs.domain.Book;
 import cqrs.domain.BookId;
+import lombok.Data;
 
-public class BookRegistered implements Event<Book> {
-	public final BookId id;
-
-	public final String title;
-
-	public final String isbn;
-
-	public BookRegistered(BookId id, String title, String isbn) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.isbn = isbn;
-	}
+public @Data class BookRegistered implements Event<Book> {
+	private final BookId id;
+	private final String title;
+	private final String isbn;
 
 	@Override
 	public void visit(Book book) {
 		book.title = this.title;
 		book.isbn = this.isbn;
 	}
+
 }

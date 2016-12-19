@@ -4,7 +4,7 @@ import cqrs.api.domain.IAggregateRoot;
 
 public interface IEventStorage {
 	IAggregateRootStorage getAggregateRootStore(
-			Class<IAggregateRoot> aggregateType);
+			Class<? extends IAggregateRoot> aggregateType);
 
 	void close();
 }

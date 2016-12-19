@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import cqrs.domain.BookId;
 
-
 public interface IBookStateQuery {
 	Collection<BookState> getBookStates();
 
@@ -12,7 +11,7 @@ public interface IBookStateQuery {
 
 	Collection<BookState> getLentBooks();
 
-	void addBookState(BookId id, String title, Boolean lent);
+	void addBookState(BookId id, String title, boolean lent);
 
 	void setLent(BookId id, Boolean lent);
 }

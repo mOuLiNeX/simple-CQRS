@@ -20,20 +20,20 @@ public class BookStateHandler extends EventHandler {
 
 	@Subscribe
 	public void handle(BookRegistered event) {
-		stateQuery.addBookState(event.id, event.title, false);
+		stateQuery.addBookState(event.getId(), event.getTitle(), false);
 	}
 
 	@Subscribe
 	public void handle(BookLent event) {
-		System.out.format("Book lent to %s.\n", event.borrower);
-		stateQuery.setLent(event.id, true);
+		System.out.format("Book lent to %s.\n", event.getBorrower());
+		stateQuery.setLent(event.getId(), true);
 
 	}
 
 	@Subscribe
 	public void handle(BookReturned event) {
-		System.out.format("Book returned by %s.\n", event.by);
-		stateQuery.setLent(event.id, false);
+		System.out.format("Book returned by %s.\n", event.getBy());
+		stateQuery.setLent(event.getId(), false);
 	}
 
 }

@@ -7,7 +7,7 @@ import cqrs.api.event.storage.IAggregateRootStorage;
 import cqrs.api.event.storage.IEventStorage;
 
 
-// There’s a specific storage for each Aggregate Root type, especially depending on identifier type, for type safety.
+// There is a specific storage for each Aggregate Root type, especially depending on identifier type, for type safety.
 public class EventStorage implements IEventStorage {
     private final Map<Class, IAggregateRootStorage> stores = new HashMap<>();
 

@@ -6,25 +6,13 @@ import java.time.Period;
 import cqrs.api.event.Event;
 import cqrs.domain.Book;
 import cqrs.domain.BookId;
+import lombok.Data;
 
-
-public class BookLent implements Event<Book> {
-	public final BookId id;
-
-	public final String borrower;
-
-	public final LocalDate date;
-
-	public final Period expectedDuration;
-
-	public BookLent(BookId id, String borrower, LocalDate date,
-			Period expectedDuration) {
-		super();
-		this.id = id;
-		this.borrower = borrower;
-		this.date = date;
-		this.expectedDuration = expectedDuration;
-	}
+public @Data class BookLent implements Event<Book> {
+	private final BookId id;
+	private final String borrower;
+	private final LocalDate date;
+	private final Period expectedDuration;
 
 	@Override
 	public void visit(Book book) {
