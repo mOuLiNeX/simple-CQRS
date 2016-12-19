@@ -8,7 +8,6 @@ import com.google.common.collect.Multimap;
 import cqrs.api.event.Event;
 import cqrs.api.event.storage.IAggregateRootStorage;
 
-
 //  Stores list of events associated with aggregate root identifier.
 public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {
 	private final Multimap<ID, Event> store = ArrayListMultimap.create();
@@ -21,6 +20,11 @@ public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {
 	@Override
 	public Collection<Event> get(ID id) {
 		return store.get(id);
+	}
+
+	@Override
+	public boolean contains(ID id) {
+		return store.containsKey(id);
 	}
 
 }

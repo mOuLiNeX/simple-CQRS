@@ -39,11 +39,10 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 	}
 
 	private TAggregateRoot load(ID id) {
-		Collection<Event> events = aggregateRootStorage.get(id);
-		if (events.isEmpty()) {
+		if (!aggregateRootStorage.contains(id)) {
 			throw new InvalidOperationException("No element in repository with id " + id);
 		}
-		TAggregateRoot root = createInstance(id, events);
+		TAggregateRoot root = createInstance(id, aggregateRootStorage.get(id));
 		items.put(id, root);
 		return root;
 	}

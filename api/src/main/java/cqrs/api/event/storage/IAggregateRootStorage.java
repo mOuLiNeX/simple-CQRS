@@ -9,4 +9,6 @@ public interface IAggregateRootStorage<ID> {
 	void append(ID id, Iterable<Event> events);
 
 	Collection<Event> get(ID id);
+
+	boolean contains(ID id);
 }
