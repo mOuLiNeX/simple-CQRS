@@ -1,5 +1,7 @@
 package cqrs.command.handler;
 
+import javax.inject.Inject;
+
 import cqrs.api.event.repository.IRepository;
 import cqrs.api.repository.ISession;
 import cqrs.api.repository.ISessionFactory;
@@ -14,6 +16,7 @@ public class BookCommandHandler {
 	private final ISessionFactory factory;
 	private IRepository<BookId, Book> repository;
 
+	@Inject
 	public BookCommandHandler(ISessionFactory factory) {
 		this.factory = factory;
 	}

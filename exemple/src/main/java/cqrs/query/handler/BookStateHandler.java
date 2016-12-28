@@ -1,5 +1,7 @@
 package cqrs.query.handler;
 
+import javax.inject.Inject;
+
 import com.google.common.eventbus.Subscribe;
 
 import cqrs.api.event.EventHandler;
@@ -13,6 +15,7 @@ public class BookStateHandler extends EventHandler {
 
 	private final IBookStateQuery stateQuery;
 
+	@Inject
 	public BookStateHandler(IBookStateQuery stateQuery) {
 		super();
 		this.stateQuery = stateQuery;

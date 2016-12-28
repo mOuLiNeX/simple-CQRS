@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.time.Period;
 
+import javax.inject.Singleton;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +33,6 @@ import cqrs.impl.repository.SessionFactory;
 public class BookCommandHandlerTest {
 	private ISessionFactory factory;
 	private Injector injector;
-	private IEventStorage eventStore;
 
 	private BookCommandHandler bookCommandHandler;
 	private IAggregateRootStorage<BookId> bookEvtStore;
@@ -41,20 +42,18 @@ public class BookCommandHandlerTest {
 		injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(IEventStorage.class).to(EventStorage.class).asEagerSingleton();
-				bind(ISessionFactory.class).to(SessionFactory.class);
+				bind(IEventStorage.class).to(EventStorage.class).in(Singleton.class);
+				bind(ISessionFactory.class).to(SessionFactory.class).in(Singleton.class);
 			}
 		});
 
 		factory = injector.getInstance(ISessionFactory.class);
-		eventStore = injector.getInstance(IEventStorage.class);
-
-		bookCommandHandler = new BookCommandHandler(factory);
-		bookEvtStore = eventStore.getAggregateRootStore(Book.class);
+		bookCommandHandler = injector.getInstance(BookCommandHandler.class);
+		bookEvtStore = injector.getInstance(IEventStorage.class).getAggregateRootStore(Book.class);
 	}
 
 	@After
-	public void teaDown() {
+	public void tearDown() {
 		factory.close();
 	}
 

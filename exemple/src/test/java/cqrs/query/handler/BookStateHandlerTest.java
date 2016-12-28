@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.time.Period;
 
+import javax.inject.Singleton;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,14 +31,13 @@ public class BookStateHandlerTest {
 		Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(IBookStateQuery.class).to(BookStateQuery.class);
+				bind(IBookStateQuery.class).to(BookStateQuery.class).in(Singleton.class);
 			}
 		});
 
 		query = injector.getInstance(IBookStateQuery.class);
 
-		// Enregistrement des event handlers
-		bookStateHandler = new BookStateHandler(query);
+		bookStateHandler = injector.getInstance(BookStateHandler.class);
 	}
 
 	@Test

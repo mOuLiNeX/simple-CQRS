@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.time.Period;
 
+import javax.inject.Singleton;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +33,6 @@ import cqrs.query.BookState;
 import cqrs.query.BookStateQuery;
 import cqrs.query.IBookStateQuery;
 import cqrs.query.handler.BookStateHandler;
-import cqrs.query.handler.LateReturnNotifier;
 
 public class IntegrationTest {
 
@@ -42,15 +43,16 @@ public class IntegrationTest {
 
 	private BookCommandHandler bookCommandHandler;
 	private IAggregateRootStorage<BookId> bookEvtStore;
+	private BookStateHandler instance;
 
 	@Before
 	public void setUp() {
 		injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
-				bind(IEventStorage.class).to(EventStorage.class).asEagerSingleton();
-				bind(ISessionFactory.class).to(SessionFactory.class);
-				bind(IBookStateQuery.class).to(BookStateQuery.class);
+				bind(IEventStorage.class).to(EventStorage.class).in(Singleton.class);
+				bind(ISessionFactory.class).to(SessionFactory.class).in(Singleton.class);
+				bind(IBookStateQuery.class).to(BookStateQuery.class).in(Singleton.class);
 			}
 		});
 
@@ -58,16 +60,14 @@ public class IntegrationTest {
 		query = injector.getInstance(IBookStateQuery.class);
 		eventStore = injector.getInstance(IEventStorage.class);
 
-		// Enregistrement des event handlers
-		new BookStateHandler(query);
-		new LateReturnNotifier();
+		instance = injector.getInstance(BookStateHandler.class);
 
-		bookCommandHandler = new BookCommandHandler(factory);
+		bookCommandHandler = injector.getInstance(BookCommandHandler.class);
 		bookEvtStore = eventStore.getAggregateRootStore(Book.class);
 	}
 
 	@After
-	public void teaDown() {
+	public void tearDown() {
 		factory.close();
 	}
 
