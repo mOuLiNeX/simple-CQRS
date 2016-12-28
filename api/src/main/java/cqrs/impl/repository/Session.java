@@ -16,7 +16,7 @@ public class Session implements ISession {
 
     private final Set<ISessionItem> enlistedItems = new HashSet<>();
 
-    private static final ThreadLocal<Session> current = new ThreadLocal<Session>();
+    private static final ThreadLocal<Session> current = new ThreadLocal<>();
 
     Session(IEventStorage eventStorage) {
         this.eventStorage = eventStorage;
@@ -34,9 +34,7 @@ public class Session implements ISession {
     }
 
     public void submitChanges() {
-        for (ISessionItem enlisted : enlistedItems) {
-            enlisted.submitChanges();
-        }
+        enlistedItems.forEach(ISessionItem::submitChanges);
         enlistedItems.clear();
     }
 

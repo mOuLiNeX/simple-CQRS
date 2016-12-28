@@ -11,18 +11,18 @@ import cqrs.domain.Book;
 import cqrs.domain.BookId;
 
 public class BookCommandHandler {
-	private ISessionFactory factory;
+	private final ISessionFactory factory;
 	private IRepository<BookId, Book> repository;
 
 	public BookCommandHandler(ISessionFactory factory) {
 		this.factory = factory;
 	}
 
-	public IRepository<BookId, Book> getBooks() {
+	private IRepository<BookId, Book> getBooks() {
 		return new BookRepository();
 	}
 
-	public void handle(CreateBook command) throws Exception {
+	public void handle(CreateBook command) {
 		ISession session = factory.openSession();
 		try {
 			getBooks().add(new Book(command.id, command.title, command.isbn));
@@ -32,7 +32,7 @@ public class BookCommandHandler {
 		}
 	}
 
-	public void handle(LendBook command) throws Exception {
+	public void handle(LendBook command) {
 		ISession session = factory.openSession();
 		try {
 			Book book = getBooks().findById(command.getId());

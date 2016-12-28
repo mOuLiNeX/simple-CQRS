@@ -20,7 +20,7 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 
 	private final IAggregateRootStorage<ID> aggregateRootStorage;
 
-	public Repository() {
+	protected Repository() {
 		aggregateRootStorage = Session.enlist(this);
 	}
 
@@ -32,9 +32,9 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 	@Override
 	public TAggregateRoot findById(ID id) {
 		if (!items.containsKey(id)) {
-			return (TAggregateRoot) load(id);
+			return load(id);
 		} else {
-			return (TAggregateRoot) items.get(id);
+			return items.get(id);
 		}
 	}
 
@@ -62,7 +62,7 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 		}
 	}
 
-	protected void publishEvents(IUncommittedEvents uncommittedEvents) {
+	private void publishEvents(IUncommittedEvents uncommittedEvents) {
 		for (Event event : uncommittedEvents) {
 			Bus.post(event);
 		}

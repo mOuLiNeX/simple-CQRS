@@ -9,11 +9,11 @@ import cqrs.impl.event.UncommittedEvents;
 
 
 public class AggregateRoot<ID> implements IAggregateRoot<ID> {
-	protected ID id;
+	protected final ID id;
 
 	private final IUncommittedEvents uncommittedEvents = new UncommittedEvents();
 
-	public AggregateRoot(ID id) {
+	protected AggregateRoot(ID id) {
 		this.id = id;
 	}
 
@@ -23,9 +23,7 @@ public class AggregateRoot<ID> implements IAggregateRoot<ID> {
 	}
 
 	public void replay(Collection<Event> events) {
-		for (Event event : events) {
-			this.accept(event);
-		}
+		events.forEach(this::accept);
 	}
 
 	private void append(Event event) {
@@ -42,7 +40,7 @@ public class AggregateRoot<ID> implements IAggregateRoot<ID> {
 		visitor.visit(this);
 	}
 
-	public void addEvent(Event event) {
+	protected void addEvent(Event event) {
 		accept(event);
 		append(event);
 	}
