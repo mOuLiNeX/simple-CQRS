@@ -4,9 +4,13 @@ bin
 /target/
 .project
 .settings/
+.idea/
 api/.classpath
+api/*.iml
 api/.project
 api/.settings/
 exemple/.classpath
 exemple/.project
 exemple/.settings
+exemple/*.iml
+*.iml
