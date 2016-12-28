@@ -27,6 +27,7 @@ import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
 import cqrs.domain.event.handler.BookStateHandler;
 import cqrs.domain.event.handler.LateReturnNotifier;
+import cqrs.domain.query.BookState;
 import cqrs.domain.query.BookStateQuery;
 import cqrs.domain.query.IBookStateQuery;
 import cqrs.impl.event.storage.EventStorage;
@@ -104,7 +105,9 @@ public class IntegrationTest {
 		bookCommandHandler.handle(new CreateBook(bookId, "The Lord of the Rings", "0-618-15396-9"));
 
 		// THEN
-		assertThat(query.getBookState(bookId).isLent()).isFalse();
+		BookState projection = query.getBookState(bookId);
+		assertThat(projection.isLent()).isFalse();
+		assertThat(query.getLentBooks()).doesNotContain(projection);
 	}
 
 	@Test
@@ -144,7 +147,9 @@ public class IntegrationTest {
 		bookCommandHandler.handle(new LendBook(bookId, "Alice", LocalDate.now(), Period.ofDays(14)));
 
 		// THEN
-		assertThat(query.getBookState(bookId).isLent()).isTrue();
+		BookState projection = query.getBookState(bookId);
+		assertThat(projection.isLent()).isTrue();
+		assertThat(query.getLentBooks()).containsExactly(projection);
 	}
 
 	@Test
