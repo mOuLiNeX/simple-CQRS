@@ -84,19 +84,6 @@ public class IntegrationTest {
 	}
 
 	@Test
-	public void shouldCreateABook() throws Exception {
-		// GIVEN
-		BookId bookId = BookId.newBookId();
-
-		// WHEN
-		bookCommandHandler.handle(new CreateBook(bookId, "The Lord of the Rings", "0-618-15396-9"));
-
-		// THEN
-		assertThat(bookEvtStore.get(bookId)).isNotEmpty().hasSize(1)
-				.contains(new BookRegistered(bookId, "The Lord of the Rings", "0-618-15396-9"));
-	}
-
-	@Test
 	public void aCreatedBookIsNotLent() throws Exception {
 		// GIVEN
 		BookId bookId = BookId.newBookId();
@@ -108,21 +95,6 @@ public class IntegrationTest {
 		BookState projection = query.getBookState(bookId);
 		assertThat(projection.isLent()).isFalse();
 		assertThat(query.getLentBooks()).doesNotContain(projection);
-	}
-
-	@Test
-	public void shouldLendABook() throws Exception {
-		// GIVEN
-		BookId bookId = BookId.newBookId();
-		bookCommandHandler.handle(new CreateBook(bookId, "The Lord of the Rings", "0-618-15396-9"));
-
-		// WHEN
-		bookCommandHandler.handle(new LendBook(bookId, "Alice", LocalDate.now(), Period.ofDays(14)));
-
-		// THEN
-		assertThat(bookEvtStore.get(bookId)).isNotEmpty().hasSize(2).contains(
-				new BookRegistered(bookId, "The Lord of the Rings", "0-618-15396-9"),
-				new BookLent(bookId, "Alice", LocalDate.now(), Period.ofDays(14)));
 	}
 
 	@Test(expected = InvalidOperationException.class)

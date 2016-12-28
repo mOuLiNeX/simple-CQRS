@@ -9,6 +9,8 @@ public interface IBookStateQuery {
 
 	BookState getBookState(BookId id);
 
+	boolean containsBookState(BookId id);
+
 	Collection<BookState> getLentBooks();
 
 	void addBookState(BookId id, String title, boolean lent);

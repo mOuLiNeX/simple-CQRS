@@ -1,6 +1,9 @@
 package cqrs.impl.event.storage;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -18,6 +21,11 @@ public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {
 	}
 
 	@Override
+	public void append(ID id, Event... events) {
+		store.putAll(id, Stream.of(events).collect(toSet()));
+	}
+
+	@Override
 	public Collection<Event> get(ID id) {
 		return store.get(id);
 	}
@@ -25,6 +33,11 @@ public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {
 	@Override
 	public boolean contains(ID id) {
 		return store.containsKey(id);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return store.isEmpty();
 	}
 
 }
