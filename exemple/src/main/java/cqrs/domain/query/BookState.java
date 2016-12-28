@@ -1,7 +1,5 @@
 package cqrs.domain.query;
 
-import java.util.Objects;
-
 import cqrs.domain.BookId;
 import lombok.AllArgsConstructor;
 import lombok.Data;

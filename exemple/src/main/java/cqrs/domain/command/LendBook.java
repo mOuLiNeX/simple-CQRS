@@ -5,13 +5,14 @@ import java.time.Period;
 
 import cqrs.api.command.Command;
 import cqrs.domain.BookId;
+import lombok.Data;
 
-public class LendBook implements Command {
+public @Data class LendBook implements Command {
 
-    public final BookId id;
-    public final String name;
-    public final LocalDate date;
-    public final Period duration;
+	private final BookId id;
+	private final String name;
+	private final LocalDate date;
+	private final Period duration;
 
     public LendBook(BookId bookId, String name, LocalDate date, Period duration) {
         this.id = bookId;

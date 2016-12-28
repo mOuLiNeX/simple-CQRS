@@ -35,8 +35,8 @@ public class BookCommandHandler {
 	public void handle(LendBook command) throws Exception {
 		ISession session = factory.openSession();
 		try {
-			Book book = getBooks().findById(command.id);
-			book.lend(command.name, command.date, command.duration);
+			Book book = getBooks().findById(command.getId());
+			book.lend(command.getName(), command.getDate(), command.getDuration());
 			session.submitChanges();
 		} finally {
 			session.close();
@@ -46,7 +46,7 @@ public class BookCommandHandler {
 	public void handle(TakeBookBack command) throws Exception {
 		ISession session = factory.openSession();
 		try {
-			getBooks().findById(command.id).giveBack(command.returnDate);
+			getBooks().findById(command.getId()).giveBack(command.getReturnDate());
 			session.submitChanges();
 		} finally {
 			session.close();
