@@ -1,14 +1,14 @@
-package cqrs.domain.command.handler;
+package cqrs.command.handler;
 
 import cqrs.api.event.repository.IRepository;
 import cqrs.api.repository.ISession;
 import cqrs.api.repository.ISessionFactory;
+import cqrs.command.CreateBook;
+import cqrs.command.LendBook;
+import cqrs.command.TakeBookBack;
+import cqrs.command.repository.BookRepository;
 import cqrs.domain.Book;
 import cqrs.domain.BookId;
-import cqrs.domain.command.CreateBook;
-import cqrs.domain.command.LendBook;
-import cqrs.domain.command.TakeBookBack;
-import cqrs.domain.repository.BookRepository;
 
 public class BookCommandHandler {
 	private ISessionFactory factory;

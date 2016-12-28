@@ -1,4 +1,4 @@
-package cqrs.domain.event.handler;
+package cqrs.query.handler;
 
 import com.google.common.eventbus.Subscribe;
 

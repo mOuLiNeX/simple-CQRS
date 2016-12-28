@@ -1,4 +1,4 @@
-package cqrs.domain.query;
+package cqrs.query;
 
 import cqrs.domain.BookId;
 import lombok.AllArgsConstructor;

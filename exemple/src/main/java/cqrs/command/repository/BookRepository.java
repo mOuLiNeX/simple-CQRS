@@ -1,4 +1,4 @@
-package cqrs.domain.repository;
+package cqrs.command.repository;
 
 import java.util.Collection;
 

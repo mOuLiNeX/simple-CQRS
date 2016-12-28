@@ -1,4 +1,4 @@
-package cqrs.domain.command;
+package cqrs.command;
 
 import java.time.LocalDate;
 import java.time.Period;

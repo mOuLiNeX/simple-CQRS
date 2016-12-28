@@ -1,4 +1,4 @@
-package cqrs.domain.command;
+package cqrs.command;
 
 import cqrs.api.command.Command;
 import cqrs.domain.BookId;

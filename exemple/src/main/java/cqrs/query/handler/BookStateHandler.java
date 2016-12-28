@@ -1,4 +1,4 @@
-package cqrs.domain.event.handler;
+package cqrs.query.handler;
 
 import com.google.common.eventbus.Subscribe;
 
@@ -6,7 +6,7 @@ import cqrs.api.event.EventHandler;
 import cqrs.domain.event.BookLent;
 import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
-import cqrs.domain.query.IBookStateQuery;
+import cqrs.query.IBookStateQuery;
 
 
 public class BookStateHandler extends EventHandler {

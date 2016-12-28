@@ -18,20 +18,20 @@ import cqrs.api.event.storage.IEventStorage;
 import cqrs.api.exception.ArgumentException;
 import cqrs.api.exception.InvalidOperationException;
 import cqrs.api.repository.ISessionFactory;
-import cqrs.domain.command.CreateBook;
-import cqrs.domain.command.LendBook;
-import cqrs.domain.command.TakeBookBack;
-import cqrs.domain.command.handler.BookCommandHandler;
+import cqrs.command.CreateBook;
+import cqrs.command.LendBook;
+import cqrs.command.TakeBookBack;
+import cqrs.command.handler.BookCommandHandler;
 import cqrs.domain.event.BookLent;
 import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
-import cqrs.domain.event.handler.BookStateHandler;
-import cqrs.domain.event.handler.LateReturnNotifier;
-import cqrs.domain.query.BookState;
-import cqrs.domain.query.BookStateQuery;
-import cqrs.domain.query.IBookStateQuery;
 import cqrs.impl.event.storage.EventStorage;
 import cqrs.impl.repository.SessionFactory;
+import cqrs.query.BookState;
+import cqrs.query.BookStateQuery;
+import cqrs.query.IBookStateQuery;
+import cqrs.query.handler.BookStateHandler;
+import cqrs.query.handler.LateReturnNotifier;
 
 public class IntegrationTest {
 

@@ -1,4 +1,4 @@
-package cqrs.domain.query;
+package cqrs.query;
 
 import java.util.Collection;
 
