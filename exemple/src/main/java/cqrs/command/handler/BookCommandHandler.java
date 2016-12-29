@@ -14,7 +14,6 @@ import cqrs.domain.BookId;
 
 public class BookCommandHandler {
 	private final ISessionFactory factory;
-	private IRepository<BookId, Book> repository;
 
 	@Inject
 	public BookCommandHandler(ISessionFactory factory) {
@@ -22,6 +21,7 @@ public class BookCommandHandler {
 	}
 
 	private IRepository<BookId, Book> getBooks() {
+		// TODO Trouver mieux pour mutualiser l'instance par unit or work
 		return new BookRepository();
 	}
 
