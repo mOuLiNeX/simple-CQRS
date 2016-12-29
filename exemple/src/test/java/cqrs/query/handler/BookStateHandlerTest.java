@@ -7,7 +7,9 @@ import java.time.Period;
 
 import javax.inject.Singleton;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.inject.AbstractModule;
@@ -22,12 +24,11 @@ import cqrs.query.BookStateQuery;
 import cqrs.query.IBookStateQuery;
 
 public class BookStateHandlerTest {
-	private IBookStateQuery query;
+	private static IBookStateQuery query;
+	private static BookStateHandler bookStateHandler;
 
-	private BookStateHandler bookStateHandler;
-
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void init() {
 		Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
@@ -36,8 +37,18 @@ public class BookStateHandlerTest {
 		});
 
 		query = injector.getInstance(IBookStateQuery.class);
-
 		bookStateHandler = injector.getInstance(BookStateHandler.class);
+	}
+
+	@Before
+	public void setUp() {
+		// On s'assure qu'on démarre dans un environnement vierge
+		assertThat(query.getBookStates()).isEmpty();
+	}
+
+	@After
+	public void tearDown() {
+		query.reset();
 	}
 
 	@Test

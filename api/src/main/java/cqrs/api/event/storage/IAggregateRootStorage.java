@@ -19,4 +19,6 @@ public interface IAggregateRootStorage<ID> {
 	boolean contains(ID id);
 
 	boolean isEmpty();
+
+	void reset();
 }

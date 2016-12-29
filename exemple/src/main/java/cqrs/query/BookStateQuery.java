@@ -43,4 +43,9 @@ public class BookStateQuery implements IBookStateQuery {
 		getBookState(id).setLent(lent);
 	}
 
+	@Override
+	public void reset() {
+		states.clear();
+	}
+
 }

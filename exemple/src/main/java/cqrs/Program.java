@@ -3,6 +3,8 @@ package cqrs;
 import java.time.LocalDate;
 import java.time.Period;
 
+import javax.inject.Singleton;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -24,52 +26,52 @@ import cqrs.query.handler.LateReturnNotifier;
 
 public class Program {
 
-    public static void main(String[] args) throws Exception {
-        Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-                bind(IEventStorage.class).to(EventStorage.class);
-                bind(ISessionFactory.class).to(SessionFactory.class);
-                bind(IBookStateQuery.class).to(BookStateQuery.class);
-            }
-        });
+	private static Injector injector;
 
-        ISessionFactory factory = injector.getInstance(ISessionFactory.class);
-        IBookStateQuery query = injector.getInstance(IBookStateQuery.class);
+	public static void main(String[] args) throws Exception {
+		injector = Guice.createInjector(new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(IEventStorage.class).to(EventStorage.class).in(Singleton.class);
+				bind(ISessionFactory.class).to(SessionFactory.class).in(Singleton.class);
+				bind(IBookStateQuery.class).to(BookStateQuery.class).in(Singleton.class);
+				// Enregistrement des event handlers
+				bind(BookStateHandler.class).asEagerSingleton();
+				bind(LateReturnNotifier.class).asEagerSingleton();
+			}
+		});
 
-        // Enregistrement des event handlers
-        new BookStateHandler(query);
-        new LateReturnNotifier();
+		ISessionFactory factory = injector.getInstance(ISessionFactory.class);
+		BookCommandHandler bookCommandHandler = injector.getInstance(BookCommandHandler.class);
 
-        // Traitements (procedural)
-        BookId bookId = BookId.newBookId();
+		// Traitements (procedural)
+		BookId bookId = BookId.newBookId();
 
-        try {
-            BookCommandHandler bookCommandHandler = new BookCommandHandler(factory);
-            bookCommandHandler.handle(new CreateBook(bookId, "The Lord of the Rings", "0-618-15396-9"));
-            showBooks(query);
+		try {
+			bookCommandHandler.handle(new CreateBook(bookId, "The Lord of the Rings", "0-618-15396-9"));
+			showBooks();
 
-            bookCommandHandler.handle(new LendBook(bookId, "Alice", LocalDate.of(2009, 11, 2), Period.ofDays(14)));
-            showBooks(query);
+			bookCommandHandler.handle(new LendBook(bookId, "Alice", LocalDate.of(2009, 11, 2), Period.ofDays(14)));
+			showBooks();
 
-            bookCommandHandler.handle(new TakeBookBack(bookId, LocalDate.of(2009, 11, 8)));
-            showBooks(query);
+			bookCommandHandler.handle(new TakeBookBack(bookId, LocalDate.of(2009, 11, 8)));
+			showBooks();
 
-            bookCommandHandler.handle(new LendBook(bookId, "Bob", LocalDate.of(2009, 11, 9), Period.ofDays(14)));
-            showBooks(query);
+			bookCommandHandler.handle(new LendBook(bookId, "Bob", LocalDate.of(2009, 11, 9), Period.ofDays(14)));
+			showBooks();
 
-            bookCommandHandler.handle(new TakeBookBack(bookId, LocalDate.of(2010, 03, 1)));
-            showBooks(query);
-        } finally {
-            factory.close();
-        }
+			bookCommandHandler.handle(new TakeBookBack(bookId, LocalDate.of(2010, 03, 1)));
+			showBooks();
+		} finally {
+			factory.close();
+		}
 
-    }
+	}
 
-    private static void showBooks(IBookStateQuery query) {
-        for (BookState state : query.getBookStates()) {
-			System.out.format("%s is %s.\n", state.getTitle(), state.isLent() ? "lent"
-                : "home");
-        }
-    }
+	private static void showBooks() {
+		IBookStateQuery query = injector.getInstance(IBookStateQuery.class);
+		for (BookState state : query.getBookStates()) {
+			System.out.format("%s is %s.\n", state.getTitle(), state.isLent() ? "lent" : "home");
+		}
+	}
 }

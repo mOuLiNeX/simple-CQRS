@@ -8,7 +8,9 @@ import java.time.Period;
 import javax.inject.Singleton;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.inject.AbstractModule;
@@ -36,23 +38,22 @@ import cqrs.query.handler.BookStateHandler;
 
 public class IntegrationTest {
 
-	private ISessionFactory factory;
-	private Injector injector;
-	private IBookStateQuery query;
-	private IEventStorage eventStore;
+	private static ISessionFactory factory;
+	private static IBookStateQuery query;
+	private static IEventStorage eventStore;
 
-	private BookCommandHandler bookCommandHandler;
-	private IAggregateRootStorage<BookId> bookEvtStore;
-	private BookStateHandler instance;
+	private static BookCommandHandler bookCommandHandler;
+	private static IAggregateRootStorage<BookId> bookEvtStore;
 
-	@Before
-	public void setUp() {
-		injector = Guice.createInjector(new AbstractModule() {
+	@BeforeClass
+	public static void init() {
+		Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
 				bind(IEventStorage.class).to(EventStorage.class).in(Singleton.class);
 				bind(ISessionFactory.class).to(SessionFactory.class).in(Singleton.class);
 				bind(IBookStateQuery.class).to(BookStateQuery.class).in(Singleton.class);
+				bind(BookStateHandler.class).asEagerSingleton();
 			}
 		});
 
@@ -60,15 +61,26 @@ public class IntegrationTest {
 		query = injector.getInstance(IBookStateQuery.class);
 		eventStore = injector.getInstance(IEventStorage.class);
 
-		instance = injector.getInstance(BookStateHandler.class);
-
 		bookCommandHandler = injector.getInstance(BookCommandHandler.class);
 		bookEvtStore = eventStore.getAggregateRootStore(Book.class);
 	}
 
+	@AfterClass
+	public static void close() {
+		factory.close();
+	}
+
+	@Before
+	public void setUp() {
+		// On s'assure qu'on démarre dans un environnement vierge
+		assertThat(bookEvtStore.isEmpty()).isTrue();
+		assertThat(query.getBookStates()).isEmpty();
+	}
+
 	@After
 	public void tearDown() {
-		factory.close();
+		query.reset();
+		bookEvtStore.reset();
 	}
 
 	@Test

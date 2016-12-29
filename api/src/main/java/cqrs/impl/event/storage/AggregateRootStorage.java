@@ -32,4 +32,9 @@ public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {
 		return store.isEmpty();
 	}
 
+	@Override
+	public void reset() {
+		store.clear();
+	}
+
 }

@@ -10,7 +10,6 @@ import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
 import cqrs.query.IBookStateQuery;
 
-
 public class BookStateHandler extends EventHandler {
 
 	private final IBookStateQuery stateQuery;

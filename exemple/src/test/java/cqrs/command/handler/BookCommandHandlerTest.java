@@ -8,7 +8,9 @@ import java.time.Period;
 import javax.inject.Singleton;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.google.inject.AbstractModule;
@@ -31,15 +33,13 @@ import cqrs.impl.event.storage.EventStorage;
 import cqrs.impl.repository.SessionFactory;
 
 public class BookCommandHandlerTest {
-	private ISessionFactory factory;
-	private Injector injector;
+	private static ISessionFactory factory;
+	private static BookCommandHandler bookCommandHandler;
+	private static IAggregateRootStorage<BookId> bookEvtStore;
 
-	private BookCommandHandler bookCommandHandler;
-	private IAggregateRootStorage<BookId> bookEvtStore;
-
-	@Before
-	public void setUp() {
-		injector = Guice.createInjector(new AbstractModule() {
+	@BeforeClass
+	public static void init() {
+		Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
 				bind(IEventStorage.class).to(EventStorage.class).in(Singleton.class);
@@ -52,9 +52,20 @@ public class BookCommandHandlerTest {
 		bookEvtStore = injector.getInstance(IEventStorage.class).getAggregateRootStore(Book.class);
 	}
 
+	@AfterClass
+	public static void close() {
+		factory.close();
+	}
+
+	@Before
+	public void setUp() {
+		// On s'assure qu'on démarre dans un environnement vierge
+		assertThat(bookEvtStore.isEmpty()).isTrue();
+	}
+
 	@After
 	public void tearDown() {
-		factory.close();
+		bookEvtStore.reset();
 	}
 
 	@Test

@@ -16,4 +16,6 @@ public interface IBookStateQuery {
 	void addBookState(BookId id, String title, boolean lent);
 
 	void setLent(BookId id, Boolean lent);
+
+	void reset();
 }
