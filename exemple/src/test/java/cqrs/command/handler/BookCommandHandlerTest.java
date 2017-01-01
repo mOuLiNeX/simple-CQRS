@@ -5,17 +5,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.time.Period;
 
-import javax.inject.Singleton;
+import javax.inject.Inject;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import org.junit.runner.RunWith;
 
 import cqrs.api.event.storage.IAggregateRootStorage;
 import cqrs.api.event.storage.IEventStorage;
@@ -29,36 +24,22 @@ import cqrs.domain.BookId;
 import cqrs.domain.event.BookLent;
 import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
-import cqrs.impl.event.storage.EventStorage;
-import cqrs.impl.repository.SessionFactory;
+import cqrs.runner.MyGuiceRunner;
 
+@RunWith(MyGuiceRunner.class)
 public class BookCommandHandlerTest {
-	private static ISessionFactory factory;
-	private static BookCommandHandler bookCommandHandler;
-	private static IAggregateRootStorage<BookId> bookEvtStore;
+	@Inject
+	private ISessionFactory factory;
+	@Inject
+	private BookCommandHandler bookCommandHandler;
+	@Inject
+	private IEventStorage eventStore;
 
-	@BeforeClass
-	public static void init() {
-		Injector injector = Guice.createInjector(new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(IEventStorage.class).to(EventStorage.class).in(Singleton.class);
-				bind(ISessionFactory.class).to(SessionFactory.class).in(Singleton.class);
-			}
-		});
-
-		factory = injector.getInstance(ISessionFactory.class);
-		bookCommandHandler = injector.getInstance(BookCommandHandler.class);
-		bookEvtStore = injector.getInstance(IEventStorage.class).getAggregateRootStore(Book.class);
-	}
-
-	@AfterClass
-	public static void close() {
-		factory.close();
-	}
+	private IAggregateRootStorage<BookId> bookEvtStore;
 
 	@Before
 	public void setUp() {
+		bookEvtStore = eventStore.getAggregateRootStore(Book.class);
 		// On s'assure qu'on démarre dans un environnement vierge
 		assertThat(bookEvtStore.isEmpty()).isTrue();
 	}

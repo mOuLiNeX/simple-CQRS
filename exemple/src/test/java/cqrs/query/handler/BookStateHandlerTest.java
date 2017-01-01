@@ -5,40 +5,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.time.Period;
 
-import javax.inject.Singleton;
+import javax.inject.Inject;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import org.junit.runner.RunWith;
 
 import cqrs.domain.BookId;
 import cqrs.domain.event.BookLent;
 import cqrs.domain.event.BookRegistered;
 import cqrs.domain.event.BookReturned;
-import cqrs.query.BookStateQuery;
 import cqrs.query.IBookStateQuery;
+import cqrs.runner.MyGuiceRunner;
 
+@RunWith(MyGuiceRunner.class)
 public class BookStateHandlerTest {
-	private static IBookStateQuery query;
-	private static BookStateHandler bookStateHandler;
-
-	@BeforeClass
-	public static void init() {
-		Injector injector = Guice.createInjector(new AbstractModule() {
-			@Override
-			protected void configure() {
-				bind(IBookStateQuery.class).to(BookStateQuery.class).in(Singleton.class);
-			}
-		});
-
-		query = injector.getInstance(IBookStateQuery.class);
-		bookStateHandler = injector.getInstance(BookStateHandler.class);
-	}
+	@Inject
+	private IBookStateQuery query;
+	@Inject
+	private BookStateHandler bookStateHandler;
 
 	@Before
 	public void setUp() {
