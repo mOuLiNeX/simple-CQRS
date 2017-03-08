@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import cqrs.api.event.Event;
 import cqrs.domain.BookId;
 
 // no domain logic occurs
@@ -29,23 +30,20 @@ public class BookStateQuery implements IBookStateQuery {
 	}
 
 	@Override
-	public Collection<BookState> getLentBooks() {
-		return states.values().stream().filter(state -> state.isLent()).collect(toList());
-	}
-
-	@Override
-	public void addBookState(BookId id, String title, boolean lent) {
-		states.put(id, new BookState(id, title, lent));
-	}
-
-	@Override
-	public void setLent(BookId id, Boolean lent) {
-		getBookState(id).setLent(lent);
+	public Iterable<BookState> getLentBooks() {
+		return states.values().stream().filter(BookState::isLent).collect(toList());
 	}
 
 	@Override
 	public void reset() {
 		states.clear();
+	}
+
+	@Override
+	public void updateState(Event<BookId> event) {
+		BookState state = states.getOrDefault(event.getId(), new BookState());
+		state.apply(event);
+		states.put(state.getId(), state);
 	}
 
 }

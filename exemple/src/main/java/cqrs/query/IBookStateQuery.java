@@ -2,6 +2,7 @@ package cqrs.query;
 
 import java.util.Collection;
 
+import cqrs.api.event.Event;
 import cqrs.domain.BookId;
 
 public interface IBookStateQuery {
@@ -11,11 +12,10 @@ public interface IBookStateQuery {
 
 	boolean containsBookState(BookId id);
 
-	Collection<BookState> getLentBooks();
+	Iterable<BookState> getLentBooks();
 
-	void addBookState(BookId id, String title, boolean lent);
-
-	void setLent(BookId id, Boolean lent);
-
+	// TODO pour test uniquement :-(
 	void reset();
+
+	void updateState(Event<BookId> event);
 }

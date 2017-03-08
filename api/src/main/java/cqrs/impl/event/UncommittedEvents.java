@@ -7,11 +7,11 @@ import java.util.List;
 import cqrs.api.event.Event;
 import cqrs.api.event.IUncommittedEvents;
 
-public class UncommittedEvents implements IUncommittedEvents {
+public class UncommittedEvents<ID> implements IUncommittedEvents<ID> {
 
-    private final List<Event> events = new LinkedList<>();
+	private final List<Event<ID>> events = new LinkedList<>();
 
-    public void append(Event event) {
+	public void append(Event<ID> event) {
         events.add(event);
     }
 
@@ -26,7 +26,7 @@ public class UncommittedEvents implements IUncommittedEvents {
     }
 
     @Override
-    public Iterator<Event> iterator() {
+	public Iterator<Event<ID>> iterator() {
         return events.iterator();
     }
 }

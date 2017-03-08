@@ -11,6 +11,7 @@ import cqrs.api.event.storage.IEventStorage;
 public class EventStorage implements IEventStorage {
     private final Map<Class, IAggregateRootStorage> stores = new HashMap<>();
 
+	@Override
     public void close() {
         stores.clear();
     }

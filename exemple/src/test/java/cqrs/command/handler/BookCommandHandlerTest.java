@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import cqrs.api.event.storage.IAggregateRootStorage;
 import cqrs.api.event.storage.IEventStorage;
 import cqrs.api.exception.InvalidOperationException;
-import cqrs.api.repository.ISessionFactory;
 import cqrs.command.CreateBook;
 import cqrs.command.LendBook;
 import cqrs.command.TakeBookBack;
@@ -28,8 +27,6 @@ import cqrs.runner.MyGuiceRunner;
 
 @RunWith(MyGuiceRunner.class)
 public class BookCommandHandlerTest {
-	@Inject
-	private ISessionFactory factory;
 	@Inject
 	private BookCommandHandler bookCommandHandler;
 	@Inject

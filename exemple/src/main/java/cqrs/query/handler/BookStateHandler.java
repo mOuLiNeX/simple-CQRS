@@ -4,10 +4,9 @@ import javax.inject.Inject;
 
 import com.google.common.eventbus.Subscribe;
 
+import cqrs.api.event.Event;
 import cqrs.api.event.EventHandler;
-import cqrs.domain.event.BookLent;
-import cqrs.domain.event.BookRegistered;
-import cqrs.domain.event.BookReturned;
+import cqrs.domain.BookId;
 import cqrs.query.IBookStateQuery;
 
 public class BookStateHandler extends EventHandler {
@@ -21,21 +20,7 @@ public class BookStateHandler extends EventHandler {
 	}
 
 	@Subscribe
-	public void handle(BookRegistered event) {
-		stateQuery.addBookState(event.getId(), event.getTitle(), false);
+	public void handle(Event<BookId> event) {
+		stateQuery.updateState(event);
 	}
-
-	@Subscribe
-	public void handle(BookLent event) {
-		System.out.format("Book lent to %s.\n", event.getBorrower());
-		stateQuery.setLent(event.getId(), true);
-
-	}
-
-	@Subscribe
-	public void handle(BookReturned event) {
-		System.out.format("Book returned by %s.\n", event.getBy());
-		stateQuery.setLent(event.getId(), false);
-	}
-
 }

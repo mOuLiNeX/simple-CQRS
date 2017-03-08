@@ -10,15 +10,15 @@ import cqrs.api.event.storage.IAggregateRootStorage;
 
 //  Stores list of events associated with aggregate root identifier.
 public class AggregateRootStorage<ID> implements IAggregateRootStorage<ID> {
-	private final Multimap<ID, Event> store = ArrayListMultimap.create();
+	private final Multimap<ID, Event<ID>> store = ArrayListMultimap.create();
 
 	@Override
-	public void append(ID id, Iterable<Event> events) {
+	public void append(ID id, Iterable<Event<ID>> events) {
 		store.putAll(id, events);
 	}
 
 	@Override
-	public Collection<Event> get(ID id) {
+	public Collection<Event<ID>> get(ID id) {
 		return store.get(id);
 	}
 

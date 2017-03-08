@@ -15,7 +15,7 @@ public class LateReturnNotifier extends EventHandler {
 	@Subscribe
 	public void handle(BookReturned event) {
 		if (event.isLate()) {
-			System.out.format("%s was late.\n", event.getBy());
+			System.out.format("%s was late.%n", event.getBy());
 		}
 	}
 

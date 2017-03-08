@@ -1,9 +1,9 @@
 package cqrs.api.event;
 
-public interface IUncommittedEvents extends Iterable<Event> {
+public interface IUncommittedEvents<ID> extends Iterable<Event<ID>> {
 	Boolean hasEvents();
 
 	void commit();
 
-	void append(Event event);
+	void append(Event<ID> event);
 }

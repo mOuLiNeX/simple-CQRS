@@ -1,6 +1,5 @@
 package cqrs.impl.repository;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +46,7 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 		return root;
 	}
 
-	protected abstract TAggregateRoot createInstance(ID id, Collection<Event> events);
+	protected abstract TAggregateRoot createInstance(ID id, Iterable<Event<ID>> events);
 
 	@Override
 	public void submitChanges() {
@@ -62,8 +61,8 @@ public abstract class Repository<ID, TAggregateRoot extends IAggregateRoot<ID>>
 		}
 	}
 
-	private void publishEvents(IUncommittedEvents uncommittedEvents) {
-		for (Event event : uncommittedEvents) {
+	private void publishEvents(IUncommittedEvents<ID> uncommittedEvents) {
+		for (Event<ID> event : uncommittedEvents) {
 			Bus.post(event);
 		}
 	}

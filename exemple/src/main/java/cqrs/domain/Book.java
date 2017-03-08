@@ -27,6 +27,10 @@ public class Book extends AggregateRoot<BookId> {
 
 	public Book(BookId id) {
 		super(id);
+
+		super.register(BookLent.class, this::apply);
+		super.register(BookRegistered.class, this::apply);
+		super.register(BookReturned.class, this::apply);
 	}
 
 	public Book(BookId id, String title, String isbn) {
@@ -35,26 +39,23 @@ public class Book extends AggregateRoot<BookId> {
 		addEvent(new BookRegistered(id, title, isbn));
 	}
 
-	public void lend(String borrower, LocalDate date, Period expectedDuration)
-			throws InvalidOperationException {
+	public void lend(String borrower, LocalDate date, Period expectedDuration) throws InvalidOperationException {
 		if (this.borrower != null)
 			throw new InvalidOperationException("The book is already lent.");
 
 		addEvent(new BookLent(id, borrower, date, expectedDuration));
 	}
 
-	public void giveBack(LocalDate returnDate)
-			throws InvalidOperationException, ArgumentException {
+	public void giveBack(LocalDate returnDate) throws InvalidOperationException, ArgumentException {
 		if (borrower == null)
 			throw new InvalidOperationException("The book has not been lent.");
 		if (returnDate.isBefore(date))
-			throw new ArgumentException(
-					"The book cannot be returned before being lent.");
+			throw new ArgumentException("The book cannot be returned before being lent.");
 
 		Period actualDuration = Period.between(date, returnDate);
 
 		addEvent(new BookReturned(id, borrower, actualDuration,
-				(actualDuration.getDays() > expectedDuration.getDays())));
+				actualDuration.getDays() > expectedDuration.getDays()));
 	}
 
 	@Override
@@ -73,6 +74,21 @@ public class Book extends AggregateRoot<BookId> {
 				&& Objects.equals(this.title, other.title);
 	}
 
+	public void apply(BookLent evt) {
+		this.borrower = evt.getBorrower();
+		this.date = evt.getDate();
+		this.expectedDuration = evt.getExpectedDuration();
+	}
+
+	public void apply(BookRegistered evt) {
+		this.title = evt.getTitle();
+		this.isbn = evt.getIsbn();
+	}
+
+	public void apply(BookReturned evt) {
+		this.borrower = null;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.id, this.isbn, this.title);
@@ -80,7 +96,6 @@ public class Book extends AggregateRoot<BookId> {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).addValue(this.id)
-				.addValue(this.isbn).addValue(this.title).toString();
+		return MoreObjects.toStringHelper(this).addValue(this.id).addValue(this.isbn).addValue(this.title).toString();
 	}
 }
